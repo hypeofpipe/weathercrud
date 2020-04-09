@@ -1,7 +1,6 @@
-import { Router, Response } from 'express';
-import { check } from 'express-validator/check';
+import { Request, Response, Router } from 'express';
+import { check } from 'express-validator';
 
-import Request from '../../types/Request';
 import { registerUser } from '../../services/api/user';
 
 const router: Router = Router();

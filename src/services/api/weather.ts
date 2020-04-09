@@ -1,10 +1,9 @@
+import { Request, Response } from 'express';
 import config from 'config';
-import { Response } from 'express';
-import { validationResult } from 'express-validator/check';
+import { validationResult } from 'express-validator';
 import HttpStatusCodes from 'http-status-codes';
 import axios from 'axios';
 
-import Request from '../../types/Request';
 import WeatherData, {
   IWeatherData,
   IWeatherDataPure,

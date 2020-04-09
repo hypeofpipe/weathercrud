@@ -1,12 +1,11 @@
+import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import config from 'config';
-import { Response } from 'express';
-import { validationResult } from 'express-validator/check';
+import { validationResult } from 'express-validator';
 import HttpStatusCodes from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
 import Payload from '../../types/Payload';
-import Request from '../../types/Request';
 import User, { IUser } from '../../models/User';
 
 export const registerUser = async (req: Request, res: Response) => {

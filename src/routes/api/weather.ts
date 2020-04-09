@@ -1,8 +1,8 @@
-import { Router, Response } from 'express';
-import { check } from 'express-validator/check';
+import { Request, Response, Router } from 'express';
+import { check } from 'express-validator';
 
 import auth from '../../middleware/auth';
-import Request from '../../types/Request';
+
 import { createWeatherDataByCityName } from '../../services/api/weather';
 
 const router: Router = Router();
