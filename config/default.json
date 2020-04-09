@@ -1,5 +1,6 @@
 {
-  "mongoURI": "mongodb+srv://root:1234@devconnector-ejkgk.mongodb.net/test?retryWrites=true",
+  "mongoURI": "yourMongoUri",
   "jwtSecret": "jwtSecretToken",
-  "jwtExpiration": 360000
+  "jwtExpiration": 360000,
+  "openWeatherAPIToken": "yourToken"
 }

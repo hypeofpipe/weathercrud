@@ -1,3 +1,7 @@
+# Tributes
+
+Big thanks to @polcham for providing such a good template https://github.com/polcham/mongoose-express-ts
+
 # Prerequisites
 
 To build and run this app locally you will need a few things:

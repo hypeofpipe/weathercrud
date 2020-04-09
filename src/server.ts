@@ -4,6 +4,7 @@ import express from 'express';
 import connectDB from '../config/database';
 import auth from './routes/api/auth';
 import user from './routes/api/user';
+import weather from './routes/api/weather';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/', (_req, res) => {
 
 app.use('/api/auth', auth);
 app.use('/api/user', user);
+app.use('/api/weather', weather);
 
 const port = app.get('port');
 const server = app.listen(port, () =>
