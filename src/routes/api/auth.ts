@@ -1,7 +1,8 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { check } from 'express-validator';
 
 import auth from '../../middleware/auth';
+import Request from '../../types/Request';
 import { fetchUser, login } from '../../services/api/auth';
 
 const router: Router = Router();

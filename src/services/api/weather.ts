@@ -8,7 +8,7 @@ import WeatherData, {
   IWeatherData,
   IWeatherDataPure,
 } from '../../models/WeatherData';
-import weatherApiResponse, { WeatherApiResponse } from 'WeatherAPIResponse';
+import { WeatherApiResponse } from 'WeatherAPIResponse';
 
 const fetchWeatherDataByCityName = async (cityName: string) => {
   const apiToken = config.get('openWeatherAPIToken');
@@ -31,6 +31,16 @@ const fetchWeatherDataByCityName = async (cityName: string) => {
   return response.data;
 };
 
+const handleValidationErrors = (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    return res
+      .status(HttpStatusCodes.BAD_REQUEST)
+      .json({ errors: errors.array() });
+  }
+};
+
 const convertData = (apiResponse: WeatherApiResponse): IWeatherDataPure => ({
   cityName: apiResponse.name,
   visibility: apiResponse.visibility,
@@ -47,19 +57,19 @@ const convertData = (apiResponse: WeatherApiResponse): IWeatherDataPure => ({
   wind: apiResponse.wind,
 });
 
+const cleanEmpty = (obj: IWeatherDataPure): object =>
+  Object.entries(obj)
+    .map(([k, v]) => [k, v && typeof v === 'object' ? cleanEmpty(v) : v])
+    .reduce((a, [k, v]) => (v == null ? a : { ...a, [k]: v }), {});
+
 export const createWeatherDataByCityName = async (
   req: Request,
   res: Response,
 ) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    console.log(errors);
-    return res
-      .status(HttpStatusCodes.BAD_REQUEST)
-      .json({ errors: errors.array() });
-  }
+  handleValidationErrors(req, res);
 
   const { cityName } = req.body;
+
   try {
     const weatherDataResponse = await fetchWeatherDataByCityName(cityName);
     const weatherData: IWeatherData = new WeatherData(
@@ -67,6 +77,62 @@ export const createWeatherDataByCityName = async (
     );
     const savedWeatherData = await weatherData.save();
     return res.json(savedWeatherData);
+  } catch (err) {
+    console.error('Error occured:', err.message);
+    return res
+      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+      .send('Server Error');
+  }
+};
+
+export const fetchAll = async (req: Request, res: Response) => {
+  handleValidationErrors(req, res);
+
+  try {
+    const allWeatherData = await WeatherData.find();
+    return res.json(allWeatherData);
+  } catch (err) {
+    console.error('Error occured:', err.message);
+    return res
+      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+      .send('Server Error');
+  }
+};
+
+export const updateOneById = async (req: Request, res: Response) => {
+  handleValidationErrors(req, res);
+
+  const { id: _id, cityName, visibility, weather, main, wind } = req.body;
+  try {
+    const updateData = cleanEmpty({
+      cityName,
+      visibility,
+      weather,
+      main,
+      wind,
+    }) as IWeatherDataPure;
+
+    const weatherDataRecord = await WeatherData.findByIdAndUpdate(
+      _id,
+      updateData,
+    );
+
+    return res.json(weatherDataRecord);
+  } catch (err) {
+    console.error('Error occured:', err.message);
+    return res
+      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+      .send('Server Error');
+  }
+};
+
+export const removeById = async (req: Request, res: Response) => {
+  handleValidationErrors(req, res);
+
+  const { id } = req.body;
+  try {
+    const deletedCount = await WeatherData.deleteOne({ _id: id });
+    return res.json(deletedCount);
   } catch (err) {
     console.error('Error occured:', err.message);
     return res
