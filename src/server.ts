@@ -12,7 +12,6 @@ const app = express();
 connectDB();
 
 // Express configuration
-app.set('port', process.env.PORT || 5000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -27,7 +26,9 @@ app.use('/api/auth', auth);
 app.use('/api/user', user);
 app.use('/api/weather', weather);
 
-const port = app.get('port');
+const port = process.env.APP_PORT || 5000;
+console.log('the port is', port);
+console.log('all envs', process.env);
 const server = app.listen(port, () =>
   console.log(`Server started on port ${port}`),
 );

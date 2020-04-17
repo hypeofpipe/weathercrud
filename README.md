@@ -8,29 +8,18 @@ To build and run this app locally you will need a few things:
 
 - Install [Node.js](https://nodejs.org/en/)
 - Install [VS Code](https://code.visualstudio.com/)
+  – Install [Docker](https://docker.com/)
 
 # Getting started
 
 - Clone the repository
 
-- Install dependencies
+– Fill the .env file:
+Note: example is at ./.env.example
 
-```
-yarn install
-yarn run tsc
-```
+– Spin up the environment
 
-- Build and run the project with auto reload (nodemon)
-
-```
-yarn server
-```
-
-- Build and run the project
-
-```
-yarn start
-```
+`docker-compose up -d`
 
 Finally, navigate to `http://localhost:5000/` and you should see the API running!
 

@@ -1,5 +1,4 @@
 {
-  "mongoURI": "yourMongoUri",
   "jwtSecret": "jwtSecretToken",
   "jwtExpiration": 360000,
   "openWeatherAPIToken": "yourToken"
