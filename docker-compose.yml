@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  nodejs:
+  weatherappnodejs:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nodejs
-    container_name: nodejs
+    image: hypeofpipe/weatherappnodejs
+    container_name: weatherappnodejs
     restart: unless-stopped
     env_file: .env
     environment:
