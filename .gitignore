@@ -6,3 +6,4 @@ yarn.lock
 config/development.json
 config/production.json
 .env
+secret.yaml

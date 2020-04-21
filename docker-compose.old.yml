@@ -1,9 +1,12 @@
 version: '3'
 
 services:
-  nodejs:
+  weatherappnodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: hypeofpipe/weatherappnodejs
-    container_name: nodejs
+    container_name: weatherappnodejs
     restart: unless-stopped
     env_file: .env
     environment:
@@ -15,12 +18,17 @@ services:
       - APP_PORT=$APP_PORT
     ports:
       - '5000:5000'
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     networks:
       - app-network
+    command: ./wait-for.sh db:27017 -- yarn watch
   db:
     image: mongo:4.1.8-xenial
     container_name: db
-    restart: always
+    restart: unless-stopped
+    env_file: .env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
@@ -38,3 +46,4 @@ networks:
 
 volumes:
   dbdata:
+  node_modules:

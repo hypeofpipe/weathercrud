@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nodejs
+  name: nodejs
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      name: nodejs
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        name: nodejs
+    spec:
+      containers:
+        - name: nodejs
+          env:
+            - name: APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_PORT
+                  name: nodejs-env
+            - name: MONGO_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_DB
+                  name: nodejs-env
+            - name: MONGO_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_HOSTNAME
+                  name: nodejs-env
+            - name: MONGO_INITDB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_INITDB_DATABASE
+                  name: nodejs-env
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_PASSWORD
+            - name: MONGO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_PORT
+                  name: nodejs-env
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_USERNAME
+                  name: mongo-secret
+          image: hypeofpipe/weatherappnodejs:v2
+          ports:
+            - containerPort: 5000
+          resources: {}
+          command: ["yarn", "watch"]
+      initContainers:
+        - name: init-db
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z db:27017; do echo waiting for db; sleep 2; done;",
+            ]
+      restartPolicy: Always
+status: {}
