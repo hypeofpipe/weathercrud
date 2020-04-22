@@ -21,7 +21,12 @@ Note: example is at ./.env.example
 
 `kubectl create -f nodejs-service.yaml,nodejs-deployment.yaml,nodejs-env-configmap.yaml,db-service.yaml,db-deployment.yaml,dbdata-persistentvolumeclaim.yaml,secret.yaml`
 
-Finally, navigate to `http://localhost:5000/` and you should see the API running!
+Use minikube to start it
+
+Finally, navigate to `http://your_pod_ip_address:5000/` and you should see the API running!
+
+Also, if you want to publish those on GKE with a custom namespace, use this command
+`kubectl apply --validate=true -f nodejs-service.yaml,nodejs-deployment.yaml,nodejs-env-configmap.yaml,db-service.yaml,db-deployment.yaml,dbdata-persistentvolumeclaim.yaml,secret.yaml --namespace=dev`
 
 ## Project Structure
 
